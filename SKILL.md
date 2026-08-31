@@ -1,6 +1,6 @@
 ---
 name: personal-knowledge-recall
-description: "Obsidian-first personal knowledge recall for tasks whose answer may depend on the user's history, including troubleshooting, planning, decisions, project continuation, personal context, learning or creation history, and prior discussions. Search the configured local vault first, then optionally use Codex QA memory and diary evidence. Do not use for greetings, pure formatting, or questions clearly unrelated to prior context."
+description: "Obsidian-first personal knowledge recall for tasks whose answer may depend on the user's history, including troubleshooting, planning, decisions, project continuation, personal context, learning or creation history, and prior discussions. Search the configured local vault first, then use indexed Codex QA diary evidence when needed and raw Session evidence only as a last fallback. Do not use for greetings, pure formatting, or questions clearly unrelated to prior context."
 ---
 
 # Personal Knowledge Recall
@@ -9,7 +9,7 @@ description: "Obsidian-first personal knowledge recall for tasks whose answer ma
 
 Use one bounded, read-only recall path:
 
-`current instructions and project facts → Obsidian → Codex QA memory → Codex QA diary`
+`current instructions and project facts → Obsidian → Codex QA diary/manifest → raw Session evidence as the last fallback`
 
 Current user instructions and current project evidence always take precedence over historical material.
 
@@ -43,20 +43,20 @@ Do not invoke it for greetings, pure formatting, simple self-contained questions
 
 See [vault-layout.md](references/vault-layout.md) for an optional layout; never assume the user's vault follows it.
 
-### 2. Optional Codex QA memory
+### 2. Optional Codex QA diary evidence
 
-Only when `qa_fallback` is `auto` and Obsidian is missing relevant context or leaves a material gap, detect whether the local `codex-qa-memory` Skill is available. When `qa_fallback` is `off`, skip both QA layers.
+Only when `qa_fallback` is `auto` and Obsidian is missing relevant context or leaves a material gap, detect whether the local `codex-qa-diary-recall` Skill is available. When `qa_fallback` is `off`, stop after Obsidian.
 
-- If available, use it for compact historical clues, preferences, rules, decisions, and project history.
-- If unavailable, skip the memory layer. Continue to the diary layer only when its stricter conditions apply and that Skill is available; otherwise remain in Obsidian-only mode.
-- A `candidate` memory is a lead, not a current fact or durable rule.
+- If available, use the diary index and manifest for the narrowest historical clues or source evidence needed for the task.
+- If unavailable, remain in Obsidian-only mode unless the host provides another explicitly authorized evidence path.
+- Retired QA memory nodes are audit artifacts, not an ordinary fallback or a source for regenerating durable knowledge.
 
-### 3. Optional QA diary evidence
+### 3. Raw Session evidence only when needed
 
-Use `codex-qa-diary-recall` only when:
+Within `codex-qa-diary-recall`, narrow raw Session evidence is allowed only when:
 
 - the user asks for exact wording, dates, evidence, chat records, Session IDs, or Thread IDs; or
-- memory results are insufficient, ambiguous, or conflicting.
+- indexed diary evidence is insufficient, ambiguous, or conflicting.
 
 Prefer the narrowest indexed diary lookup. Raw session logs are the final fallback, not the default search surface. See [codex-qa-integration.md](references/codex-qa-integration.md).
 
@@ -70,4 +70,4 @@ Prefer the narrowest indexed diary lookup. Raw session logs are the final fallba
 
 ## Write boundary
 
-Version 1 is read-only with respect to vault and QA knowledge. Do not create, edit, reorganize, promote, or delete knowledge. Daily and weekly maintenance are a separate reference workflow described in [automation-workflow.md](references/automation-workflow.md), not an action this Skill performs.
+Version 1 is read-only with respect to vault and QA evidence. Do not create, edit, reorganize, promote, or delete knowledge. Do not rebuild a retired QA memory candidate layer. Daily and weekly maintenance are a separate reference workflow described in [automation-workflow.md](references/automation-workflow.md), not an action this Skill performs.

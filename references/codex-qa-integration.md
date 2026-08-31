@@ -1,6 +1,6 @@
 # Codex QA integration
 
-Codex QA is optional. The Skill must remain useful when neither QA Skill is installed.
+Codex QA diary evidence is optional. The Skill must remain useful when the diary Skill is not installed.
 
 ## Detection
 
@@ -9,18 +9,20 @@ Use the host's normal Skill discovery. Do not assume a fixed installation path a
 ## Fallback order
 
 1. Search Obsidian first.
-2. If Obsidian is insufficient and `qa_fallback` is `auto`, use `codex-qa-memory` when available.
-3. Use `codex-qa-diary-recall` only for exact wording, dates, evidence, Session/Thread IDs, or when memory evidence is insufficient.
-4. If a QA Skill is missing, skip it without error and state the checked scope only when it affects the answer.
+2. If Obsidian is insufficient and `qa_fallback` is `auto`, use `codex-qa-diary-recall` for the narrowest indexed diary or manifest evidence.
+3. Read raw Session evidence only for exact wording, dates, evidence, Session/Thread IDs, or when indexed diary evidence is insufficient.
+4. If the diary Skill is missing, skip it without error and state the checked scope only when it affects the answer.
 
-`qa_fallback: off` disables both QA fallbacks.
+`qa_fallback: off` disables the QA diary and raw Session fallback.
 
 ## Evidence roles
 
 - Obsidian: reviewed knowledge, project state, and structured experience.
-- QA memory: compact historical leads and remembered preferences or decisions.
-- QA diary: precise source evidence and original wording.
+- QA diary and manifest: indexed historical leads and precise source locations.
+- Raw Session: last-resort source evidence and original wording.
 
-A QA `candidate` is never a durable fact. Current instructions and current project evidence override every historical layer.
+Retired QA memory nodes are frozen audit artifacts, not an ordinary recall layer. Current instructions and current project evidence override every historical layer.
+
+The Skill does not require or reactivate a QA memory candidate system.
 
 Codex QA repository: <https://github.com/haoyun18881-beep/codex-qa-memory>

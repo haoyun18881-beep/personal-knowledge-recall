@@ -233,7 +233,7 @@ def parse_args() -> argparse.Namespace:
         "--qa-fallback",
         choices=QA_FALLBACK_VALUES,
         default="auto",
-        help="use optional Codex QA Skills when available",
+        help="use optional Codex QA diary evidence when available",
     )
     parser.add_argument(
         "--output",
