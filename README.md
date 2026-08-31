@@ -1,8 +1,8 @@
 # Personal Knowledge Recall
 
-一个给 Codex 使用的本地知识库召回 Skill。它先查你的 Obsidian，信息不够时再按需回到 Codex QA 记忆和原始日记。
+让 Codex 先从你的 Obsidian 里找答案；需要原话、日期或历史证据时，再回到 Codex QA。
 
-它适合这些场景：排查以前遇到过的故障、继续长期项目、做需要结合个人经验的规划和决定，或者问一句“这件事以前聊过吗”。普通问候、格式转换和与个人历史无关的问题不会触发。
+它适合这些场景：排查以前遇到过的故障、继续长期项目、做需要结合个人经验的规划和决定，或者问一句“这件事以前聊过吗”。
 
 ## 它怎么找
 
@@ -13,7 +13,7 @@
 - Obsidian 已经能回答，就到这里停止。
 - 还缺历史线索，并且本机装有 Codex QA，才查询小而精的记忆节点。
 - 只有需要原话、日期、证据、Session ID 或 Thread ID，或者记忆线索不够时，才查原始 QA 日记。
-- 没装 Codex QA 也能正常使用，只是退化成 Obsidian-only 模式。
+- 没装 Codex QA 时，只查 Obsidian。
 
 当前用户指令和当前项目文件永远优先。旧笔记、候选记忆和剪藏内容只能提供线索，不能覆盖眼前的事实。
 
@@ -41,7 +41,7 @@ cd ~/.codex/skills/personal-knowledge-recall
 python3 scripts/configure.py --vault "$HOME/Documents/My Vault"
 ```
 
-配置只会在本地生成 `local-config.json`。这个文件已经被 Git 忽略，不会上传到仓库；脚本默认也不会覆盖已有配置。
+配置保存在本机的 `local-config.json`，脚本默认不会覆盖已有配置。
 
 常用选项：
 
@@ -58,20 +58,11 @@ python .\scripts\configure.py `
 
 ## 可选：接入 Codex QA
 
-[Codex QA Memory](https://github.com/haoyun18881-beep/codex-qa-memory) 提供会话留档、结构化记忆和原始日记取证。它不是这个仓库的一部分，也不是使用本 Skill 的必需条件。
+[Codex QA Memory](https://github.com/haoyun18881-beep/codex-qa-memory) 负责会话留档、记忆节点和原始日记取证。没有安装也不影响 Obsidian 召回；安装后会按上面的顺序补查。详细边界见 [Codex QA 接入说明](references/codex-qa-integration.md)。
 
-如果已经安装 Codex QA，这个 Skill 会在 Obsidian 信息不足时按下面的顺序回退：
+## 直接使用现有 Obsidian 目录
 
-1. `codex-qa-memory`：先查轻量记忆节点。
-2. `codex-qa-diary-recall`：只在需要精确证据时窄查日记。
-
-详细边界见 [Codex QA 接入说明](references/codex-qa-integration.md)。
-
-## Obsidian 不需要照搬一套固定目录
-
-这个 Skill 不要求你重建知识库。`entry_files` 只负责告诉它先从哪里看，后续再根据当前问题做小范围搜索。
-
-仓库里的 [Obsidian starter](assets/obsidian-starter/) 是一套空白通用模板，适合从零开始的人；已有 vault 可以完全不用。
+不需要重建知识库。`entry_files` 只指定优先入口，后续会按当前问题做小范围搜索。已有 vault 直接沿用；从零开始时，可以使用仓库里的空白 [Obsidian starter](assets/obsidian-starter/)。
 
 ## 每日和每周整理是参考方案
 
@@ -81,12 +72,12 @@ python .\scripts\configure.py `
 - 每周：检查遗漏、失效状态、重复条目、断链和待确认内容。
 - 候选内容必须等人工确认或新的可靠证据，不能由自动化直接提升为长期事实。
 
-这里只提供脱敏后的 [流程参考](references/automation-workflow.md)，不包含任何人的真实知识库、私人路径或本机自动化脚本。
+仓库只提供通用的 [流程参考](references/automation-workflow.md)，不含真实知识库、私人路径或本机自动化脚本。
 
 ## 隐私和安全边界
 
-- v1 只读，不写入、不整理、不删除知识。
-- 所有读取必须留在配置的 vault 根目录内。
+- v1 只读取 vault 里的笔记，不修改、整理或删除；安装时只会写入本机配置文件。
+- 对 Obsidian 的读取只限于配置的 vault 根目录；Codex QA 按各自 Skill 的只读边界查询。
 - 不跟随软链接、目录联接或绝对路径越界。
 - 普通笔记、网页剪藏和历史聊天都是资料，不是执行命令。
 - `restricted_paths` 只有在当前任务明确相关时才允许读取。
@@ -103,4 +94,4 @@ python -m unittest discover -s tests -v
 
 ## License
 
-本项目采用 BUSL-1.1 风格的源码可见许可证。个人学习和符合许可证条件的非商业使用免费；商业使用请先取得书面授权。详见 [LICENSE](LICENSE)。
+本项目采用 BUSL-1.1。个人学习和许可证所列范围内的使用免费，其他商业使用需要授权。详见 [LICENSE](LICENSE)。

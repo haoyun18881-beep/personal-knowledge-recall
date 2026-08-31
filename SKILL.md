@@ -70,4 +70,4 @@ Prefer the narrowest indexed diary lookup. Raw session logs are the final fallba
 
 ## Write boundary
 
-Version 1 is strictly read-only. Do not create, edit, reorganize, promote, or delete knowledge. Daily and weekly maintenance are a separate reference workflow described in [automation-workflow.md](references/automation-workflow.md), not an action this Skill performs.
+Version 1 is read-only with respect to vault and QA knowledge. Do not create, edit, reorganize, promote, or delete knowledge. Daily and weekly maintenance are a separate reference workflow described in [automation-workflow.md](references/automation-workflow.md), not an action this Skill performs.
