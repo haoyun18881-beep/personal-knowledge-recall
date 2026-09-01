@@ -14,7 +14,6 @@ from typing import Iterable
 
 SCHEMA_VERSION = 1
 DEFAULT_ENTRY_FILES = ["00-AI入口.md", "README.md", "Home.md"]
-QA_FALLBACK_VALUES = ("auto", "off")
 WINDOWS_DEVICE_NAMES = {
     "CON",
     "PRN",
@@ -123,11 +122,8 @@ def build_config(
     vault: str,
     entries: Iterable[str],
     restricted: Iterable[str],
-    qa_fallback: str,
 ) -> dict[str, object]:
     root = validate_vault(vault)
-    if qa_fallback not in QA_FALLBACK_VALUES:
-        raise ConfigurationError(f"qa_fallback must be one of: {', '.join(QA_FALLBACK_VALUES)}")
 
     entry_files = unique_in_order(
         validate_child(root, value, "entry_files") for value in entries
@@ -141,7 +137,6 @@ def build_config(
         "vault_root": str(root),
         "entry_files": entry_files,
         "restricted_paths": restricted_paths,
-        "qa_fallback": qa_fallback,
     }
 
 
@@ -230,12 +225,6 @@ def parse_args() -> argparse.Namespace:
         help="relative restricted directory; may be repeated",
     )
     parser.add_argument(
-        "--qa-fallback",
-        choices=QA_FALLBACK_VALUES,
-        default="auto",
-        help="use optional Codex QA diary evidence when available",
-    )
-    parser.add_argument(
         "--output",
         default=str(repository_root / "local-config.json"),
         help="configuration output path",
@@ -252,7 +241,6 @@ def main() -> int:
             args.vault,
             args.entries or DEFAULT_ENTRY_FILES,
             args.restricted,
-            args.qa_fallback,
         )
         output = write_json_atomic(Path(args.output), config, args.force)
     except (ConfigurationError, OSError) as exc:

@@ -40,9 +40,29 @@ class ConfigureScriptTests(unittest.TestCase):
             )
             self.assertEqual(result.returncode, 0, result.stderr)
             payload = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(
+                set(payload),
+                {"schema_version", "vault_root", "entry_files", "restricted_paths"},
+            )
             self.assertEqual(payload["vault_root"], str(vault.resolve()))
             self.assertEqual(payload["entry_files"], ["入口 文件.md"])
             self.assertEqual(payload["restricted_paths"], ["个人 档案"])
+
+    def test_unknown_fallback_option_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            vault = base / "vault"
+            vault.mkdir()
+            result = self.run_script(
+                "--vault",
+                str(vault),
+                "--fallback",
+                "auto",
+                "--output",
+                str(base / "config.json"),
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("unrecognized arguments", result.stderr)
 
     def test_existing_config_is_preserved(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -108,13 +128,11 @@ class ConfigureScriptTests(unittest.TestCase):
                 str(vault),
                 "--output",
                 str(output),
-                "--qa-fallback",
-                "off",
                 "--force",
             )
             self.assertEqual(result.returncode, 0, result.stderr)
             payload = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(payload["qa_fallback"], "off")
+            self.assertEqual(payload["vault_root"], str(vault.resolve()))
 
     def test_json_result_is_machine_readable(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

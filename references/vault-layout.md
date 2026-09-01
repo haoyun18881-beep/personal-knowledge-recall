@@ -14,7 +14,7 @@ The Skill does not require a fixed Obsidian structure. `entry_files` defines onl
 
 - `00-AI入口.md`: a short map of the vault and its important indexes.
 - `10-经验库/`: reusable troubleshooting and working experience.
-- `20-项目/`: current state, decisions, and continuation points for projects.
+- `20-项目/`: historical summaries, completed decisions, and reusable experience.
 - `30-主题/`: concepts and knowledge that span projects.
 - `70-待确认/`: candidates, conflicts, and material awaiting verification.
 

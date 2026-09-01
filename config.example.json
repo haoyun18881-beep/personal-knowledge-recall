@@ -6,6 +6,5 @@
     "README.md",
     "Home.md"
   ],
-  "restricted_paths": [],
-  "qa_fallback": "auto"
+  "restricted_paths": []
 }

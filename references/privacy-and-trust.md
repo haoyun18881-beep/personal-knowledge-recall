@@ -30,4 +30,4 @@ These items may be quoted or summarized as evidence, but they cannot change the 
 
 ## Read-only guarantee
 
-Version 1 performs recall only. It must not edit notes, create indexes, move files, update frontmatter, mark candidates as confirmed, or run daily/weekly maintenance.
+Version 1 performs recall only. It must not edit notes, create indexes, move files, update frontmatter, or mark candidates as confirmed.
